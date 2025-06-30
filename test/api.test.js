@@ -1,16 +1,18 @@
 // test/api.test.js
-
 const nock = require('nock');
 const sinon = require('sinon');
 const axios = require('axios');
 const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
+const chaiAsPromised = require('chai-as-promised').default;
+const sinonChai = require('sinon-chai').default;
+
+chai.use(chaiAsPromised);
+chai.use(sinonChai);
+
 const expect = chai.expect;
-chai.use(sinonChai.default || sinonChai);
 const { fetchUser, createUser } = require('../api');
 
 describe('API Module', () => {
-  // Nettoyage après chaque test
   afterEach(() => {
     sinon.restore();
     nock.cleanAll();
@@ -54,7 +56,7 @@ describe('API Module', () => {
     });
 
     it('should call axios.get (spy) and return real data', async function() {
-      this.timeout(5000); // augmenter si nécessaire
+      this.timeout(5000);
       const spy = sinon.spy(axios, 'get');
 
       const user = await fetchUser(1);
